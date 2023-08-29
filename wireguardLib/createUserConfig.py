@@ -1,6 +1,6 @@
 import os
-from cfg import *
-from utils.renderConfig import renderUserConfig, renderServerConfigAddition
+from wireguardLib.cfg import *
+from wireguardLib.utils.renderConfig import renderUserConfig, renderServerConfigAddition
 import json
 import time
 import re
@@ -12,7 +12,8 @@ class userConfigCreator():
     def __init__(self, userId = False, configPath = CFG_PATH):
 
         self.keysCreated = False
-        self.configPath = CFG_PATH
+        self.configCreated = False
+        self.configPath = configPath
 
         if not userId:
             self.userId = len([i for i in os.listdir(configPath) if i.startswith('userConfig') and not os.path.isfile(i)])
@@ -26,7 +27,7 @@ class userConfigCreator():
         self.userKeysPath = userKeysPath
 
         userConfigPath = f'{configPath}/userConfig_{clientId}'
-        os.system(f'mkdir {userConfigPath}')
+        os.system(f'mkdir "{userConfigPath}"')
         self.userConfigPath = userConfigPath
 
         self.userIpLastDigit = str(self.userId + 2)
@@ -37,7 +38,7 @@ class userConfigCreator():
         userConfigPath = self.userConfigPath
         userKeysPath = self.userKeysPath
 
-        os.system(f'wg genkey | tee {userConfigPath}/{userKeysPath["privatekey"]} | wg pubkey | tee {userConfigPath}/{userKeysPath["publickey"]}')
+        os.system(f'wg genkey | tee "{userConfigPath}"/{userKeysPath["privatekey"]} | wg pubkey | tee "{userConfigPath}"/{userKeysPath["publickey"]}')
 
         privatekeyPath, publickeyPath = f"{userConfigPath}/{userKeysPath['privatekey']}", f"{userConfigPath}/{userKeysPath['publickey']}"
         with open(publickeyPath) as publickey:
@@ -61,12 +62,19 @@ class userConfigCreator():
             raise 'KeysNotCreatedError. You should create keys for user before creating config'
 
         userConfigPath = self.userConfigPath
- 
-        with open(f'{userConfigPath}/userConfig_{self.userId}.conf', 'w') as userConfig:
+        userConfigFilePath = f"{userConfigPath}/userConfig_{self.userId}.conf"
+        
+        with open(userConfigFilePath, 'w') as userConfig:
             userConfig.write(self.renderedUserConfig)
+
+        self.userConfigFilePath = userConfigFilePath
+        self.configCreated = True
 
 
     def saveAllUserConfiguration(self) -> None:
+
+        if not(self.keysCreated * self.configCreated):
+            raise 'Keys and Config not created'
 
         config = {"userId": self.userId,
                   "userIpLastDigit": self.userIpLastDigit,

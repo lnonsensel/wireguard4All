@@ -25,7 +25,10 @@ class sqlDatabase():
         cursor.execute("""CREATE TABLE IF NOT EXISTS users
                 (id TEXT,
                 telegram_id TEXT,
-                username TEXT
+                username TEXT,
+                active TEXT,
+                on_trial BOOL,
+                ending_timestamp TEXT
                 )"""
                 )
 
@@ -46,7 +49,7 @@ class sqlDatabase():
         base.commit()
     
 
-    def delete_user(self, user_id) -> None:
+    def delete_user_by_id(self, user_id) -> None:
 
         cursor = self.cursor
         base = self.base
@@ -54,6 +57,16 @@ class sqlDatabase():
         request = 'DELETE FROM users WHERE id = (?)'
 
         cursor.execute(request, user_id)
+        base.commit()
+
+    def delete_user_by_telegram_id(self, telegram_id) -> None:
+
+        cursor = self.cursor
+        base = self.base
+
+        request = 'DELETE FROM users WHERE telegram_id = (?)'
+
+        cursor.execute(request, telegram_id)
         base.commit()
 
 
@@ -73,7 +86,7 @@ class sqlDatabase():
         return user
     
 
-    def get_all_users_ids(self):
+    def get_all_users_ids(self) -> list:
         
         cursor = self.cursor
         base = self.base
@@ -89,21 +102,36 @@ class sqlDatabase():
         return ids
 
 
-    def get_users_quantity(self):
+    def get_users_quantity(self) -> int:
         
         return len(self.get_all_users_ids())
 
+    def user_exists(self, telegram_id) -> bool:
 
+        cursor = self.cursor
+        request = f"SELECT telegram_id FROM users WHERE telegram_id = {telegram_id}"
+        telegram_ids = cursor.execute(request)
+        telegram_ids = telegram_ids.fetchall()
+        telegram_ids = [i[0] for i in telegram_ids]
+
+        if telegram_ids == []:
+            return False
+        else:
+            return True
+
+
+    def clear_database(self) -> None:
+
+        cursor = self.cursor
+        base = self.base
+
+        request = "DELETE FROM users"
+
+        cursor.execute(request)
+        base.commit()
 
 if __name__ == '__main__':
     database = sqlDatabase()
 
-    user = User('0','qweqwe','qweqweqwe')
-
-    # database.add_user(user)
-
-    # database.delete_user('0')
-
-    # print(database.get_user_data('0'))
-
-    print(database.get_all_users_ids())
+    database.delete_user_by_id(0)
+    database.delete_user_by_id(1)
