@@ -1,8 +1,0 @@
-{
-    "userId": 2,
-    "userIpLastDigit": "4",
-    "privatekey": "sGOtzPiFHfrOWZZrGwIrBWg2mAaeo5C+6A1XzmElYWY=",
-    "publickey": "K8aejqJswF44PlYvGHAIdTcF6HPE5Oi27jmz7V7G1Uc=",
-    "renderedServerConfig": "\n[Peer]\nPublicKey = K8aejqJswF44PlYvGHAIdTcF6HPE5Oi27jmz7V7G1Uc=\nAllowedIPs = 10.0.0.4/32\n",
-    "timestamp": 1693318510.2104754
-}

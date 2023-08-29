@@ -123,6 +123,9 @@ class userConfigManipulator():
             serverConfig.write(serverConfigData)
 
 
+
+
+
 if __name__ == '__main__':
 
     user = userConfigCreator()
