@@ -1,0 +1,1 @@
+DATABASE_PATH = "/mnt/c/Users/LTT's PC/Desktop/python/wireGuard4All/databases"

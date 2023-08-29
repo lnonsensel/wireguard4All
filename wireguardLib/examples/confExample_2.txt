@@ -1,0 +1,10 @@
+[Interface]
+PrivateKey = KHzgDLe1aALBPMX19RjXf0MLnCy2yD/u7bGQsUkpv0M=
+Address = 10.0.0.3/32
+DNS = 8.8.8.8
+
+[Peer]
+PublicKey = fl8kaLhkiG4YGoCpkf2FsTzM5tiNl8aI+JRoAusLpmU=
+Endpoint = 185.166.197.187:51830
+AllowedIPs = 0.0.0.0/0
+PersistentKeepalive = 20
